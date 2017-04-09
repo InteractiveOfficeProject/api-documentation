@@ -830,6 +830,11 @@
     "definitions": {
         "User": {
             "type": "object",
+            "required": [
+                "UserID",
+                "FirstName",
+                "LastName"
+            ],
             "properties": {
                 "UserID": {
                     "type": "integer",
@@ -846,6 +851,9 @@
                 },
                 "LastName": {
                     "type": "string"
+                },
+                "ProfilePictureURL": {
+                    "type": "string"
                 }
             },
             "xml": {
@@ -854,6 +862,10 @@
         },
         "Activity": {
             "type": "object",
+            "required": [
+                "ActivityID",
+                "Name"
+            ],
             "properties": {
                 "ActivityID": {
                     "type": "integer",
@@ -874,6 +886,10 @@
         },
         "Room": {
             "type": "object",
+            "required": [
+                "RoomID",
+                "Name"
+            ],
             "properties": {
                 "RoomID": {
                     "type": "integer",
@@ -895,14 +911,19 @@
         "Break": {
             "type": "object",
             "description": "The break object which gets created once a user signs up for a break",
+            "required": [
+                "BreakID",
+                "User",
+                "Activities",
+                "Status"
+            ],
             "properties": {
                 "BreakID": {
                     "type": "integer",
                     "format": "int64"
                 },
-                "UserID": {
-                    "type": "integer",
-                    "format": "int64",
+                "User": {
+                    "$ref": "#/definitions/Activity",
                     "description": "The ID of the user who is currently in the queue"
                 },
                 "Joined": {
@@ -910,14 +931,14 @@
                     "format": "date-time",
                     "description": "The datetime value when the user has joined the queue"
                 },
-                "ActivityIDs": {
+                "Activities": {
                     "type": "array",
                     "description": "The array of ActivityIDs the user has signed up for",
                     "items": {
                         "$ref": "#/definitions/Activity"
                     }
                 },
-                "status": {
+                "Status": {
                     "type": "string",
                     "description": "The status of the break",
                     "enum": [
@@ -937,8 +958,11 @@
         "Feedback": {
             "type": "object",
             "required": [
-                "name",
-                "photoUrls"
+                "FeedbackID",
+                "User",
+                "Partners",
+                "Activity",
+                "Feedback"
             ],
             "properties": {
                 "FeedbackID": {
@@ -946,8 +970,6 @@
                     "format": "int64"
                 },
                 "User": {
-                    "type": "integer",
-                    "format": "int64",
                     "$ref": "#/definitions/User"
                 },
                 "Partners": {
