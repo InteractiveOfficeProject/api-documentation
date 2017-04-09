@@ -828,158 +828,147 @@
         }
     },
     "definitions": {
-        "Order": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "petId": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "quantity": {
-                    "type": "integer",
-                    "format": "int32"
-                },
-                "shipDate": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "status": {
-                    "type": "string",
-                    "description": "Order Status",
-                    "enum": [
-                        "placed",
-                        "approved",
-                        "delivered"
-                    ]
-                },
-                "complete": {
-                    "type": "boolean",
-                    "default": false
-                }
-            },
-            "xml": {
-                "name": "Order"
-            }
-        },
-        "Category": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "name": {
-                    "type": "string"
-                }
-            },
-            "xml": {
-                "name": "Category"
-            }
-        },
         "User": {
             "type": "object",
             "properties": {
-                "id": {
+                "UserID": {
                     "type": "integer",
                     "format": "int64"
                 },
-                "username": {
+                "Email": {
                     "type": "string"
                 },
-                "firstName": {
+                "Password": {
                     "type": "string"
                 },
-                "lastName": {
+                "FirstName": {
                     "type": "string"
                 },
-                "email": {
+                "LastName": {
                     "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "userStatus": {
-                    "type": "integer",
-                    "format": "int32",
-                    "description": "User Status"
                 }
             },
             "xml": {
                 "name": "User"
             }
         },
-        "Tag": {
+        "Activity": {
             "type": "object",
             "properties": {
-                "id": {
+                "ActivityID": {
                     "type": "integer",
                     "format": "int64"
                 },
-                "name": {
+                "Name": {
                     "type": "string"
+                },
+                "MaximumUsers": {
+                    "type": "int64",
+                    "default": 0,
+                    "description": "The number of maximum users that are allowed for this activity. 0 means that unlimited users can be matched up at the same time for this activity."
                 }
             },
             "xml": {
-                "name": "Tag"
+                "name": "Activity"
             }
         },
-        "Pet": {
+        "Room": {
+            "type": "object",
+            "properties": {
+                "RoomID": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Name": {
+                    "type": "string"
+                },
+                "MaximumUsers": {
+                    "type": "int64",
+                    "default": 0,
+                    "description": "The number of maximum users that are allowed for this activity. 0 means that unlimited users can be matched up at the same time for this activity."
+                }
+            },
+            "xml": {
+                "name": "Room"
+            }
+        },
+        "Break": {
+            "type": "object",
+            "description": "The break object which gets created once a user signs up for a break",
+            "properties": {
+                "BreakID": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "UserID": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The ID of the user who is currently in the queue"
+                },
+                "Joined": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The datetime value when the user has joined the queue"
+                },
+                "ActivityIDs": {
+                    "type": "array",
+                    "description": "The array of ActivityIDs the user has signed up for",
+                    "items": {
+                        "$ref": "#/definitions/Activity"
+                    }
+                },
+                "status": {
+                    "type": "string",
+                    "description": "The status of the break",
+                    "enum": [
+                        "waiting",
+                        "inprogress",
+                        "waitingforfeedback",
+                        "complete",
+                        "cancelled"
+                    ],
+                    "default": "waiting"
+                }
+            },
+            "xml": {
+                "name": "Break"
+            }
+        },
+        "Feedback": {
             "type": "object",
             "required": [
                 "name",
                 "photoUrls"
             ],
             "properties": {
-                "id": {
+                "FeedbackID": {
                     "type": "integer",
                     "format": "int64"
                 },
-                "category": {
-                    "$ref": "#/definitions/Category"
+                "User": {
+                    "type": "integer",
+                    "format": "int64",
+                    "$ref": "#/definitions/User"
                 },
-                "name": {
-                    "type": "string",
-                    "example": "doggie"
-                },
-                "photoUrls": {
+                "Partners": {
                     "type": "array",
-                    "xml": {
-                        "name": "photoUrl",
-                        "wrapped": true
-                    },
+                    "description": "The array of users whom the user had the break with",
                     "items": {
-                        "type": "string"
+                        "$ref": "#/definitions/User"
                     }
                 },
-                "tags": {
-                    "type": "array",
-                    "xml": {
-                        "name": "tag",
-                        "wrapped": true
-                    },
-                    "items": {
-                        "$ref": "#/definitions/Tag"
-                    }
+                "Activity": {
+                    "$ref": "#/definitions/Activity"
                 },
-                "status": {
-                    "type": "string",
-                    "description": "pet status in the store",
-                    "enum": [
-                        "available",
-                        "pending",
-                        "sold"
-                    ]
+                "Room": {
+                    "$ref": "#/definitions/Room"
+                },
+                "Feedback": {
+                    "type": "string"
                 }
             },
             "xml": {
-                "name": "Pet"
+                "name": "Feedback"
             }
         },
         "ApiResponse": {
