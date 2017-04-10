@@ -5,8 +5,8 @@
         "version": "0.0.1",
         "title": "Interactive Office API"
     },
-    "host": "petstore.swagger.io",
-    "basePath": "/v2", 
+    "host": "",
+    "basePath": "/", 
     "schemes": [
         "http"
     ],
