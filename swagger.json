@@ -10,7 +10,191 @@
     "schemes": [
         "http"
     ],
-    "paths": {},
+    "paths": {
+        "/activities": {
+            "get": {
+                "tags": [
+                    "activity"
+                ],
+                "summary": "Find all activities",
+                "operationId": "getActivities",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/Activity"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    }
+                }
+            }
+        },
+        "/breakqueue/signup": {
+            "post": {
+                "tags": [
+                    "breakqueue"
+                ],
+                "summary": "Sign up for a break with the given parameters",
+                "operationId": "signupForBreakQueue",
+                "produces": [
+                    "application/json"
+                ],
+                 "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                           "type": "object",
+                           "required": [
+                                "Username",
+                                "Password",
+                                "ActivityIDs"
+                           ],
+                           "properties": {
+                               "Username": {
+                                   "type": "string"
+                               }, 
+                               "Password": {
+                                   "type": "string"
+                               },
+                               "ActivityIDs": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                               }
+                           }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    },
+                    "406": {
+                        "description": "The array of ActivityIDs was not provided or contained 0 items"
+                    }
+                }
+            }
+        },
+        "/breakqueue/ping": {
+            "get": {
+                "tags": [
+                    "breakqueue"
+                ],
+                "summary": "Checks if a match was found for the previously signed up break",
+                "operationId": "pingBreakQueue",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                           "type": "object",
+                           "required": [
+                                "Username",
+                                "Password"
+                           ],
+                           "properties": {
+                               "Username": {
+                                   "type": "string"
+                               }, 
+                               "Password": {
+                                   "type": "string"
+                               }
+                           }
+                        }
+                    }
+                ],
+                "responses": {
+                    "100": {
+                        "description": "No match found, but user is in the queue"
+                    },
+                    "200": {
+                        "description": "Successful operation, a match was found",
+                        "schema": {
+                            "$ref": "#/definitions/BreakMatch"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    },
+                    "406": {
+                        "description": "The user credentials are right but the user is not in the queue yet. Use /break/signup to register to the queue and attempt pinging again."
+                    }
+                }
+            }
+        },
+        "/breakqueue/leave": {
+            "delete": {
+                "tags": [
+                    "breakqueue"
+                ],
+                "summary": "Removes the user from the current queue",
+                "operationId": "leaveBreakQueue",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                           "type": "object",
+                           "required": [
+                                "Username",
+                                "Password"
+                           ],
+                           "properties": {
+                               "Username": {
+                                   "type": "string"
+                               }, 
+                               "Password": {
+                                   "type": "string"
+                               }
+                           }
+                        }
+                    }
+                ],
+                "responses": {
+                    "100": {
+                        "description": "The user cannot be removed from the queue because it was never added"
+                    },
+                    "200": {
+                        "description": "Successful operation, the user was removed from the queue"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
+        }
+    },
     "securityDefinitions": {
         "petstore_auth": {
             "type": "oauth2",
@@ -75,7 +259,8 @@
                     "type": "string"
                 },
                 "MaximumUsers": {
-                    "type": "int64",
+                    "type": "integer",
+                    "format": "int64",
                     "default": 0,
                     "description": "The number of maximum users that are allowed for this activity. 0 means that unlimited users can be matched up at the same time for this activity."
                 }
@@ -99,7 +284,8 @@
                     "type": "string"
                 },
                 "MaximumUsers": {
-                    "type": "int64",
+                    "type": "integer",
+                    "format": "int64",
                     "default": 0,
                     "description": "The number of maximum users that are allowed for this activity. 0 means that unlimited users can be matched up at the same time for this activity."
                 }
@@ -108,7 +294,7 @@
                 "name": "Room"
             }
         },
-        "Break": {
+        "BreakSeekerRequest": {
             "type": "object",
             "description": "The break object which gets created once a user signs up for a break",
             "required": [
@@ -123,7 +309,7 @@
                     "format": "int64"
                 },
                 "User": {
-                    "$ref": "#/definitions/Activity",
+                    "$ref": "#/definitions/User",
                     "description": "The ID of the user who is currently in the queue"
                 },
                 "Joined": {
@@ -152,7 +338,30 @@
                 }
             },
             "xml": {
-                "name": "Break"
+                "name": "BreakSeekerRequest"
+            }
+        },
+        "BreakMatch": {
+            "type": "object",
+            "properties": {
+                "Partners": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/User"
+                    },
+                    "description": "The array of partners the user got matched up with"
+                },
+                "Activity": {
+                    "$ref": "#/definitions/Activity"
+                },
+                "Room": {
+                    "$ref": "#/definitions/Room"
+                },
+                "Timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "The datetime value when the match for the users was found"
+                }   
             }
         },
         "Feedback": {
