@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "This is the API documentation of the Interactive Office project.",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "title": "Interactive Office API"
     },
     "host": "",
@@ -190,6 +190,28 @@
                     },
                     "401": {
                         "description": "Invalid credentials"
+                    }
+                }
+            }
+        },
+        "/feedbackform": {
+            "get": {
+                "tags": [
+                    "feedback"
+                ],
+                "summary": "Retrieves the feedback form",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/Feedback"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
                     }
                 }
             }
