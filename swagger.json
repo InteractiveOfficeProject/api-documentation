@@ -222,6 +222,36 @@
                     }
                 }
             }
+        },
+        "/feedback/post": {
+            "post": {
+                "tags": [
+                    "feedback"
+                ],
+                "summary": "Posts the feedback after a break was taken",
+                "operationId": "postFeedback",
+                "produces": [
+                    "application/json"
+                ],
+                 "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "TODO"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    }
+                }
+            }
         }
     },
     "securityDefinitions": {
