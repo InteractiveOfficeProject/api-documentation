@@ -199,7 +199,7 @@
                 "tags": [
                     "feedback"
                 ],
-                "summary": "Retrieves the feedback form",
+                "summary": "Retrieves the link to the feedback form: https://docs.google.com/forms/d/16LmorfEAbZp0Ugxh3tGwoobcUsxFAfOFgiezMD4K9wE/",
                 "produces": [
                     "application/json"
                 ],
@@ -212,7 +212,7 @@
                                 "FeedbackFormURL": {
                                     "type": "string",
                                     "format": "url",
-                                    "description": "The link to the feedback form which can be opened and filled in a browser. Static value: https://docs.google.com/forms/d/16LmorfEAbZp0Ugxh3tGwoobcUsxFAfOFgiezMD4K9wE/"
+                                    "description": "The link to the feedback form which can be opened and filled in a browser."
                                 }
                             }
                         }
