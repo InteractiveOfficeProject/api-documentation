@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "This is the API documentation of the Interactive Office project.",
-        "version": "0.0.2",
+        "version": "0.0.3",
         "title": "Interactive Office API"
     },
     "host": "",
@@ -209,10 +209,10 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "FeedbackForm": {
+                                "FeedbackFormURL": {
                                     "type": "string",
-                                    "format": "html",
-                                    "description": "The feedback form as a renderable HTML"
+                                    "format": "url",
+                                    "description": "The link to the feedback form which can be opened and filled in a browser"
                                 }
                             }
                         }
@@ -250,7 +250,8 @@
                     "401": {
                         "description": "Invalid credentials"
                     }
-                }
+                },
+                "deprecated":true
             }
         }
     },
@@ -421,44 +422,6 @@
                     "format": "date-time",
                     "description": "The datetime value when the match for the users was found"
                 }   
-            }
-        },
-        "Feedback": {
-            "type": "object",
-            "required": [
-                "FeedbackID",
-                "User",
-                "Partners",
-                "Activity",
-                "Feedback"
-            ],
-            "properties": {
-                "FeedbackID": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "User": {
-                    "$ref": "#/definitions/User"
-                },
-                "Partners": {
-                    "type": "array",
-                    "description": "The array of users whom the user had the break with",
-                    "items": {
-                        "$ref": "#/definitions/User"
-                    }
-                },
-                "Activity": {
-                    "$ref": "#/definitions/Activity"
-                },
-                "Room": {
-                    "$ref": "#/definitions/Room"
-                },
-                "Feedback": {
-                    "type": "string"
-                }
-            },
-            "xml": {
-                "name": "Feedback"
             }
         },
         "ApiResponse": {
