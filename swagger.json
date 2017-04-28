@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "This is the API documentation of the Interactive Office project.",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "title": "Interactive Office API"
     },
     "host": "",
@@ -130,7 +130,7 @@
                     "200": {
                         "description": "Successful operation, a match was found",
                         "schema": {
-                            "$ref": "#/definitions/BreakMatch"
+                            "$ref": "#/definitions/Break"
                         }
                     },
                     "400": {
@@ -354,56 +354,13 @@
                 "name": "Room"
             }
         },
-        "BreakSeekerRequest": {
+        "Break": {
             "type": "object",
-            "description": "The break object which gets created once a user signs up for a break",
-            "required": [
-                "BreakID",
-                "User",
-                "Activities",
-                "Status"
-            ],
             "properties": {
                 "BreakID": {
                     "type": "integer",
                     "format": "int64"
                 },
-                "User": {
-                    "$ref": "#/definitions/User",
-                    "description": "The ID of the user who is currently in the queue"
-                },
-                "Joined": {
-                    "type": "string",
-                    "format": "date-time",
-                    "description": "The datetime value when the user has joined the queue"
-                },
-                "Activities": {
-                    "type": "array",
-                    "description": "The array of ActivityIDs the user has signed up for",
-                    "items": {
-                        "$ref": "#/definitions/Activity"
-                    }
-                },
-                "Status": {
-                    "type": "string",
-                    "description": "The status of the break",
-                    "enum": [
-                        "waiting",
-                        "inprogress",
-                        "waitingforfeedback",
-                        "complete",
-                        "cancelled"
-                    ],
-                    "default": "waiting"
-                }
-            },
-            "xml": {
-                "name": "BreakSeekerRequest"
-            }
-        },
-        "BreakMatch": {
-            "type": "object",
-            "properties": {
                 "Partners": {
                     "type": "array",
                     "items": {
@@ -421,7 +378,29 @@
                     "type": "string",
                     "format": "date-time",
                     "description": "The datetime value when the match for the users was found"
-                }   
+                },
+                "Status": {
+                    "type": "string",
+                    "description": "The status of the break",
+                    "enum": [
+                        "waiting",
+                        "inprogress",
+                        "complete",
+                        "cancelled"
+                    ],
+                    "default": "waiting"
+                }
+            }
+        },
+        "ParticipatesIn": {
+            "type": "object",
+            "properties": {
+                "User": {
+                    "$ref": "#/definitions/User"
+                },
+                "Break": {
+                    "$ref": "#/definitions/Break"
+                }
             }
         },
         "ApiResponse": {
